@@ -1,6 +1,5 @@
-import mysql.connector
-from faker import Faker 
-import cadastrarUsuario
+import mysql.connector;
+import cadastrarUsuario;
 
 hostname = "localhost:3306";
 database = "script_db";
@@ -18,8 +17,8 @@ try:
     if conn.is_connected():
         print ("Conexão realizada com sucesso")
         cursor = conn.cursor()
-        sql = "INSERT INTO Usuario id_usuario, senha, nome, sobrenome, cpf, telefone, email, cidade) VALUES (%d, %s, %s, %s, %s, %s, %s, %s)"
-        values = (cadastrarUsuario())
+        sql = "INSERT INTO Usuario (id_usuario, senha, nome, sobrenome, cpf, telefone, email, cidade) VALUES (%d, %s, %s, %s, %s, %s, %s, %s)"
+        values = cadastrarUsuario()
 
         cursor.execute(sql,values)
         conn.commit()
