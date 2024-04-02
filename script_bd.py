@@ -1,22 +1,35 @@
-import mysql.connect
-from faker import Faker
-hostname = "localhost:3306"
-database = "script_db"
-username = "root"
-password = ""
+import mysql.connector
+from faker import Faker 
+import cadastrarUsuario
+
+hostname = "localhost:3306";
+database = "script_db";
+username = "root";
+password = "";
 
 try:
-    conn = mysql.connector.connect(
-        host = hostname,
-        user = username,
-        password = password,
-        database = database
+    conn = mysql.connector.connect (
+    host = hostname,
+    user = username,
+    password = password,
+    database = database 
     )
 
-if conn.is_connected():
-    print ("Conexão realizada com sucesso")
+    if conn.is_connected():
+        print ("Conexão realizada com sucesso")
+        cursor = conn.cursor()
+        sql = "INSERT INTO Usuario id_usuario, senha, nome, sobrenome, cpf, telefone, email, cidade) VALUES (%d, %s, %s, %s, %s, %s, %s, %s)"
+        values = (cadastrarUsuario())
 
-    cursor = conn.cursor()
+        cursor.execute(sql,values)
+        conn.commit()
 
-    sql = "INSERT INTO Usuario id_usuario, senha, nome, sobrenome, cpf, telefone, email, cidade) VALUES (%d, %s, %s, %s, %s, %s, %s, %s)"
-    values = ("")
+        print("Novo usuário cadastrado!")
+
+        cursor.close()
+        conn.close()
+
+    else:
+        print("Conexão falhou")
+except mysql.connector.Error as bug:
+    print(f"Error:{bug}")
