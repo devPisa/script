@@ -21,8 +21,8 @@ def cadastrarUsuario():
     nome, sobrenome = gerarNome().split(' ', 1);
     cpf = fake.cpf();
     phone = fake.phone_number();
-    email = gerarEmail(nome, sobrenome)
-    cidade = "Toledo"
+    email = gerarEmail(nome, sobrenome);
+    cidade = fake.city();
     print(f"ID de Usuario: {id_usuario}")
     print(f"Senha: {senha}")
     print(f"Nome: {nome}")
@@ -31,6 +31,4 @@ def cadastrarUsuario():
     print(f"Telefone: {phone}")
     print(f"E-mail: {email}")
     print(f"Cidade: {cidade}")
-    
-
 cadastrarUsuario()
