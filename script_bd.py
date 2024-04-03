@@ -2,7 +2,7 @@ import mysql.connector;
 import cadastrarUsuario;
 
 hostname = "localhost:3306";
-database = "script_db";
+database = "script_db";''
 username = "root";
 password = "";
 
