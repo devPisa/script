@@ -1,8 +1,8 @@
 import mysql.connector;
-import cadastrarUsuario;
+from cadastrarUsuario import cadastrarUsuario; 
 
-hostname = "localhost:3306";
-database = "script_db";''
+hostname = "localhost";
+database = "script_db";
 username = "root";
 password = "";
 
@@ -17,7 +17,7 @@ try:
     if conn.is_connected():
         print ("Conexão realizada com sucesso")
         cursor = conn.cursor()
-        sql = "INSERT INTO Usuario (id_usuario, senha, nome, sobrenome, cpf, telefone, email, cidade) VALUES (%d, %s, %s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO Usuario (senha, nome, sobrenome, cpf, telefone, email, cidade) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         values = cadastrarUsuario()
 
         cursor.execute(sql,values)
