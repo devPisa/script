@@ -1,5 +1,6 @@
-from faker import Faker
-import random
+from faker import Faker;
+import re;
+
 fake = Faker('pt_BR')
 
 def gerarEmail(fantasia:str):
@@ -18,33 +19,27 @@ def gerarEndereco():
 def gerarAtividade():
     atividade = fake.random_int(1, 3);
     if atividade == 1:
-        return 'Social';
+        return 'Industrial';
     elif atividade == 2:
-        return 'Governamental';
+        return 'Social';
     else:
-        return 'Ambiental';
-    
+        return 'Serviço';
+
+def formatarTelefone():
+    telefone = re.sub(r'D','', fake.phone_number())
+    return telefone;
+
+def formatarCnpj():
+    cnpj = re.sub(r'D','',fake.cnpj());
+    return cnpj;    
 
 def cadastrarEmpresa():
-    id_empresa = fake.random_int();
     fantasia = fake.company();
     razao_social = fantasia;
-    cnpj = fake.cnpj();
+    cnpj = formatarCnpj();
     email = gerarEmail(fantasia);
     endereco = gerarEndereco();
-    telefone = fake.phone_number();
+    telefone = formatarTelefone();
     porte = fake.random_int(1,3);
     atividade = gerarAtividade();
-
-
-    print(f"ID empresa: {id_empresa}");
-    print(f"Fantasia: {fantasia}");
-    print(f"Razão Sicial: {razao_social}");
-    print(f"CNPJ: {cnpj}");
-    print(f"E-mail: {email}");
-    print(f"Endereço: {endereco}");
-    print(f"Telefone: {telefone}");
-    print(f"Porte: {porte}");
-    print(f"Atividade: {atividade}");
-
-cadastrarEmpresa()
+    return(fantasia, razao_social, cnpj, email, endereco, telefone, porte, atividade )
