@@ -1,6 +1,6 @@
 from faker import Faker
 import secrets
-import random
+import re
 
 fake = Faker('pt_BR')
 
@@ -14,21 +14,22 @@ def gerarEmail(nome:str, sobrenome:str):
     if len(nome) > 0 and len(sobrenome)> 0:
         return f"{nome.split()[0].lower()}{sobrenome.split()[-1].lower()}@bpkgrupo2.com.br";
     return '';
+
+def formatarTelefone():
+    telefone = re.sub(r'D','', fake.phone_number())
+    return telefone;
+
+def formatarCpf():
+    cpf = re.sub(r'D','', fake.cpf())
+    return cpf;
     
 def cadastrarUsuario():
-    id_usuario = fake.random_int();
     senha = secrets.token_urlsafe(8);
     nome, sobrenome = gerarNome().split(' ', 1);
-    cpf = fake.cpf();
-    phone = fake.phone_number();
+    cpf = formatarCpf();
+    telefone = formatarTelefone();
     email = gerarEmail(nome, sobrenome);
     cidade = fake.city();
-    print(f"ID de Usuario: {id_usuario}")
-    print(f"Senha: {senha}")
-    print(f"Nome: {nome}")
-    print(f"Sobrenome: {sobrenome}")
-    print(f"CPF: {cpf}")
-    print(f"Telefone: {phone}")
-    print(f"E-mail: {email}")
-    print(f"Cidade: {cidade}")
-cadastrarUsuario()
+    
+    return(senha, nome, sobrenome, cpf, telefone, email, cidade);
+
