@@ -56,7 +56,7 @@ class Empresa():
                 qntd_atual = 0;
                 while qntd_atual <= qntd_meta:
                     values = self.cadastrarEmpresa();
-                    sql = "INSERT INTO Usuario (fantasia, razao_social, cnpj, email, endereco, telefone, porte, atividade) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)";
+                    sql = "INSERT INTO Empresa (fantasia, razao_social, cnpj, email, endereco, telefone, porte, atividade) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)";
                     cursor.execute(sql, values);
                     qntd_atual += 1;
                     print(f"{qntd_atual} já cadastrados\n");
