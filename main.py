@@ -7,13 +7,13 @@ def main():
         decisao = int(input("""
                             Projeto Integrador SAGA - Grupo 2
                             Oque deseja fazer?
+
+                            1 - Cadastrar Empresa
+                            2 - Cadastrar Usuario
+                            3 - Cadastrar Resposta
                             """
                             ))
-        print("""
-                1 - Cadastrar Empresa
-                2 - Cadastrar Usuario
-                3 - Cadastrar Resposta
-                """)
+        print()
         if decisao == 1:
             Empresa().inserirBanco()
             break
