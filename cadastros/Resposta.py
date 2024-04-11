@@ -8,7 +8,7 @@ from Documento import Documento
 
 
 fake = Faker('pt_BR')
-lorem = TextLorem();
+lorem = TextLorem()
 
 class Resposta():
 
@@ -90,41 +90,41 @@ class Resposta():
 
             except Exception as bug:
                 print(f"Falha ao inserir documento no banco de dados: {bug}")
-                conn.rollback();
+                conn.rollback()
             finally:
                 cursor.close()
                 conn.close()
 
     @classmethod
     def cadastrarResposta(cls):
-        observacao = cls.gerarObservacao();
-        id_usuario, id_pergunta, id_formulario = cls.pegarId();
-        id_certificado = cls.gerarCerfiticado();
-        resposta = cls.gerarResposta();
-        return(observacao, id_usuario, id_pergunta, id_formulario, id_certificado, resposta);
+        observacao = cls.gerarObservacao()
+        id_usuario, id_pergunta, id_formulario = cls.pegarId()
+        id_certificado = cls.gerarCerfiticado()
+        resposta = cls.gerarResposta()
+        return(observacao, id_usuario, id_pergunta, id_formulario, id_certificado, resposta)
 
     @classmethod
     def inserirBanco(cls):
-        conn = conexao_db();
+        conn = conexao_db()
         if conn:
-            cursor = conn.cursor();
-            continuar = True;
+            cursor = conn.cursor()
+            continuar = True
             while continuar:
-                qntd_meta = int(input("Quantos formulários deseja cadastrar?\n"));
-                qntd_atual = 0;
+                qntd_meta = int(input("Quantos formulários deseja cadastrar?\n"))
+                qntd_atual = 0
                 while qntd_atual <= qntd_meta:
-                    values = cls.cadastrarResposta();
+                    values = cls.cadastrarResposta()
                     sql = """
                             INSERT INTO Resposta (observacao, id_usuario, id_pergunta, id_formulario, id_certificado, resposta) 
-                            VALUES (%s, %s, %s, %s, %s, %s)""";
-                    cursor.execute(sql, values);
-                    qntd_atual += 1;
-                    print(f"{qntd_atual} já cadastrados\n");
-                decisao = input(f"Deseja continuar? (s/n)");
+                            VALUES (%s, %s, %s, %s, %s, %s)"""
+                    cursor.execute(sql, values)
+                    qntd_atual += 1
+                    print(f"{qntd_atual} já cadastrados\n")
+                decisao = input(f"Deseja continuar? (s/n)")
                 if decisao.lower() != 's':
-                    continuar = False;
+                    continuar = False
             print(f"Cadastro finalizado, {qntd_atual} cadastrados\n")
-            conn.commit();
-            cursor.close();
+            conn.commit()
+            cursor.close()
             conn.close()
     

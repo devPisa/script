@@ -11,7 +11,7 @@ class Certificado():
     
     @classmethod
     def calcularResultado(cls):
-        objetoReposta = Resposta();
+        objetoReposta = Resposta()
         calculoResultado = objetoReposta.resposta()
         qntdRespostas = len(Resposta)
         qntdAcerto = sum(Resposta[3]
@@ -67,10 +67,10 @@ class Certificado():
                 conn.commit()
                 cursor.execute("""
                                 SELECT LAST_INSERT_ID()
-                               """);
+                               """)
                 id_certificado = cursor.fetchone()[0]
                 
-                return id_certificado;
+                return id_certificado
 
             except Exception as bug:
                 print(f"Falha ao incerir cadastro no banco de dados: {bug}")

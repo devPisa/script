@@ -23,20 +23,20 @@ class Formulario():
                         VALUES (%s, %s)
                         """
                 cursor.execute(sql, values)
-                conn.commit();
+                conn.commit()
                 print(f'Formulario cadastrado')
                 cursor.execute("""
                                 SELECT LAST_INSERT_ID()
-                               """);
+                               """)
                 id_formulario = cursor.fetchone()[0]
                 
-                return id_formulario;
+                return id_formulario
 
             except Exception as bug:
                 print(f"Falha ao incerir cadastro no banco de dados: {bug}")
-                conn.rollback();
+                conn.rollback()
             
             finally:
-                cursor.close();
-                conn.close();
+                cursor.close()
+                conn.close()
    
