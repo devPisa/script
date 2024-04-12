@@ -1,5 +1,5 @@
 from faker import Faker
-from database.conexao_db import conexao_db
+from conexao_db import conexao_db
 import lorem;
 
 fake = Faker('pt_BR');

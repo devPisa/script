@@ -1,6 +1,6 @@
 import random
 from lorem.text import TextLorem
-from database.conexao_db import conexao_db
+from conexao_db import conexao_db
 from faker import Faker
 from Formulario import Formulario
 from Certificado import Certificado
@@ -70,7 +70,7 @@ class Resposta():
     def cadastrarResposta(cls):
         observacao = cls.gerarObservacao()
         id_usuario, id_pergunta, id_formulario = cls.pegarId()
-        id_certificado = cls.gerarCerfiticado()
+        id_certificado = cls.gerarCertificado()
         resposta = cls.gerarResposta()
         return(observacao, id_usuario, id_pergunta, id_formulario, id_certificado, resposta)
 
@@ -101,7 +101,7 @@ class Resposta():
 
     @classmethod
     def id_resposta():
-        conn = conexao_db
+        conn = conexao_db()
         cursor = conn.cursor()
         if conn:
             try:

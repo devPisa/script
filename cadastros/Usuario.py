@@ -1,7 +1,7 @@
 from faker import Faker
 import secrets
 import re
-from database.conexao_db import conexao_db
+from conexao_db import conexao_db
 
 fake = Faker('pt_BR')
 conexao = conexao_db()

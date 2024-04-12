@@ -1,7 +1,7 @@
 from faker import Faker
 from datetime import datetime
 from Formulario import Formulario
-from database.conexao_db import conexao_db
+from conexao_db import conexao_db
 
 fake = Faker('pt_BR')
 

@@ -1,5 +1,5 @@
 import secrets;
-from database.conexao_db import conexao_db
+from conexao_db import conexao_db
 from Resposta import Resposta
 from Pergunta import Pergunta
 

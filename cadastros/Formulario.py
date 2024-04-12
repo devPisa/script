@@ -1,5 +1,5 @@
 from faker import Faker;
-from database.conexao_db import conexao_db
+from conexao_db import conexao_db
 
 fake = Faker('pt_BR')
 
@@ -15,7 +15,7 @@ class Formulario():
     def inserirBanco(cls):
         conn = conexao_db()
         if conn:
-            cursor= conn.cursor()
+            cursor = conn.cursor()
             try:
                 values = cls.cadastrarFormulario()
                 sql =   """
@@ -34,8 +34,8 @@ class Formulario():
                 cursor.close()
                 conn.close()
     @classmethod
-    def id_formulario():
-        conn = conexao_db
+    def id_formulario(cls):
+        conn = conexao_db()
         cursor = conn.cursor()
         if conn:
             try:
