@@ -4,8 +4,6 @@ from database.conexao_db import conexao_db
 from faker import Faker
 from Formulario import Formulario
 from Certificado import Certificado
-from Documento import Documento
-
 
 fake = Faker('pt_BR')
 lorem = TextLorem()
@@ -14,7 +12,7 @@ class Resposta():
 
     @staticmethod
     def gerarResposta():
-        return fake.random_int(1,3) == 1
+        return fake.random_int(1,2) == 1
 
     @staticmethod
     def gerarObservacao():
@@ -32,8 +30,8 @@ class Resposta():
         cursor = conn.cursor()
         try:
             id_usuario = """
-                        SELECT usuario.id_usuario
-                        FROM usuario
+                        SELECT Usuario.id_usuario
+                        FROM Usuario
                         ORDER BY RAND()
                         LIMIT 1
                         """
@@ -43,8 +41,8 @@ class Resposta():
             print(f"Falha consultar id_usuario no banco de dados: {bug}")
         try:
             allPerguntas = """
-                        SELECT pergunta.id_pergunta
-                        FROM  pergunta
+                        SELECT Pergunta.id_pergunta
+                        FROM  Pergunta
                         """
             cursor.execute(allPerguntas)
             id_perguntas = cursor.fetchall()
@@ -67,34 +65,7 @@ class Resposta():
     @classmethod
     def gerarCertificado(cls):
          return Certificado().inserirBanco()
-    
-    @classmethod
-    def respostaDocumento(cls):
-        conn = conexao_db()
-        if conn:
-            cursor = conn.cursor()
-
-            try:
-                id_pergunta, existeDocumento = cls.gerarId()[1]
-                if existeDocumento == 0:
-                    objetoDocumento = Documento()
-                    anexarDocumento = objetoDocumento.gerarDocumento()
-                    sql =   """
-                            UPDATE pergunta
-                            SET documento = %s
-                            WHERE id_pergunta = %s
-                            """
-                    cursor.execute(sql, (id_pergunta,anexarDocumento))
-                    conn.commit()
-                    print(f"Documento cadastrado com sucesso") 
-
-            except Exception as bug:
-                print(f"Falha ao inserir documento no banco de dados: {bug}")
-                conn.rollback()
-            finally:
-                cursor.close()
-                conn.close()
-
+        
     @classmethod
     def cadastrarResposta(cls):
         observacao = cls.gerarObservacao()
@@ -127,4 +98,27 @@ class Resposta():
             conn.commit()
             cursor.close()
             conn.close()
+
+    @classmethod
+    def id_resposta():
+        conn = conexao_db
+        cursor = conn.cursor()
+        if conn:
+            try:
+                cursor.execute("""
+                                SELECT Resposta.id_pergunta
+                                FROM Resposta
+                                ORDER BY id_resposta
+                                DESC LIMIT 1
+                               """)
+                id_resposta = cursor.fetchone()[0]
+                
+                return id_resposta
+            except Exception as bug:
+                print(f"Falha consultar id_resposta no banco de dados: {bug}")
+            finally:
+                cursor.close()
+                conn.close()
+    
+
     

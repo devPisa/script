@@ -25,12 +25,6 @@ class Formulario():
                 cursor.execute(sql, values)
                 conn.commit()
                 print(f'Formulario cadastrado')
-                cursor.execute("""
-                                SELECT LAST_INSERT_ID()
-                               """)
-                id_formulario = cursor.fetchone()[0]
-                
-                return id_formulario
 
             except Exception as bug:
                 print(f"Falha ao incerir cadastro no banco de dados: {bug}")
@@ -39,4 +33,25 @@ class Formulario():
             finally:
                 cursor.close()
                 conn.close()
+    @classmethod
+    def id_formulario():
+        conn = conexao_db
+        cursor = conn.cursor()
+        if conn:
+            try:
+                cursor.execute("""
+                                SELECT Formulario.id_formulario
+                                FROM Formulario
+                                ORDER BY id_formulario
+                                DESC LIMIT 1
+                               """)
+                id_formulario = cursor.fetchone()[0]
+                
+                return id_formulario
+            except Exception as bug:
+                print(f"Falha consultar id_formulario no banco de dados: {bug}")
+            finally:
+                cursor.close()
+                conn.close()
+
    
