@@ -1,46 +1,72 @@
 from faker import Faker
 from datetime import datetime
-from Resposta import Resposta
 from Formulario import Formulario
-from Empresa import Empresa
 from database.conexao_db import conexao_db
 
 fake = Faker('pt_BR')
 
 class Certificado():
-    
+
+    @classmethod 
+    def pegarId(cls):
+        id_formulario = Formulario.id_formulario()
+        conn = conexao_db()
+        if conn:
+            cursor = conn.cursor()
+            try:
+                id_empresaQuery =   """
+                                    SELECT Empresa.id_empresa
+                                    FROM Empresa
+                                    ORDER BY RAND()
+                                    LIMIT 1
+                                    """
+                cursor.execute(id_empresaQuery)
+                id_empresa = cursor.fetchone()[0]
+                return (id_formulario, id_empresa)
+            except Exception as bug:
+                print(f"Falha consultar id_empresa no banco de dados: {bug}")
+            finally:
+                cursor.close()
+                conn.close()
+
     @classmethod
     def calcularResultado(cls):
-        objetoReposta = Resposta()
-        calculoResultado = objetoReposta.resposta()
-        qntdRespostas = len(Resposta)
-        qntdAcerto = sum(Resposta[3]
-                         for Resposta in Resposta)
-        calculoResultado = (qntdAcerto/qntdRespostas) * 100
+        id_formulario = Formulario.id_formulario()
+        conn = conexao_db()
+        if conn:
+            cursor = conn.cursor()
+            try:
+                cursor.execute  ("""
+                                SELECT AVG(Resposta.resposta) AS mediaRespostas
+                                FROM Resposta   
+                                INNER JOIN Formulario ON Resposta.id_formulario = Formulario.id_formulario
+                                Where Resposta.id_formulario = Formulario.%s
+                                """, (id_formulario,))
+                mediaResposta = cursor.fetchone()[0]
+                calculoResultado = (mediaResposta) * 100
 
-        if calculoResultado < 74:
-            resultadoMedia = 'Reprovado'
-        elif 75 <= calculoResultado <= 85:
-            resultadoMedia = 'Bronze'
-        elif 86 <= calculoResultado <= 94:
-            resultadoMedia = 'Prata'
-        else:
-            resultadoMedia = 'Ouro'
-        return resultadoMedia
+                if calculoResultado < 74:
+                    resultadoMedia = 'Reprovado'
+                elif 75 <= calculoResultado <= 85:
+                    resultadoMedia = 'Bronze'
+                elif 86 <= calculoResultado <= 94:
+                    resultadoMedia = 'Prata'
+                else:
+                    resultadoMedia = 'Ouro'
+                return resultadoMedia
+            
+            except Exception as bug:
+                print(f"Falha ao localizar dados: {bug}")
+                return None
+            finally:
+                cursor.close()
+                conn.close()
 
     @staticmethod       
     def gerarData(start_date= datetime.now()):
-        date = fake.date_between_dates(date_start=start_date);
-        data = (date.day, date.month, (date.year)+1);
+        date = fake.date_between_dates(date_start=start_date)
+        data = (date.day, date.month, (date.year)+1)
         return data
-
-    @staticmethod #precisa verificar, pegar a função de resposta
-    def pegarId():
-        objetoFormulario = Formulario()
-        id_formulario = objetoFormulario.inserirBanco()
-        objetoEmpresa = Empresa() #pegar a logica de resposta
-        id_empresa = objetoEmpresa.inserirBanco()
-        return (id_formulario, id_empresa)
 
     @classmethod
     def gerarCertificado(cls):
