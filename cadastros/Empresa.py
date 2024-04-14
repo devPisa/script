@@ -5,12 +5,18 @@ from conexao_db import conexao_db
 fake = Faker('pt_BR')
 
 class Empresa():
+    #Função gera um e-mail a partir do nome e sobrenome do usuario
+    #Ela concatena a primeira letra do primeiro nome com o ultimo nome
+    #Ainda adiciona o dominio bpkgrupo2.com e tranforma tudo em lower(minusculo)
     @staticmethod
     def gerarEmail(fantasia:str):
         if len(fantasia) > 0:
             return f"{fantasia.split()[0].lower()}@bpkgrupo2.com.br"
         return ''
 
+    #Função responsavel por gerar endereço, ela atribui um endereço e elimina tudo
+    #que existe depois da virgula e ainda faz uma verificação se o endereço tem mais
+    #de uma linha, se sim, tambem elimina
     @staticmethod
     def gerarEndereco():
         endereco = fake.address()
@@ -20,6 +26,8 @@ class Empresa():
             endereco = endereco.split('\n')[0].strip;
         return endereco
 
+    #Função gerar atividade, faz um random de 1 á 3 e atribuir a atividade
+    #aleatoriamente de acordo com o numero
     @staticmethod
     def gerarAtividade():
         atividade = fake.random_int(1, 3)
@@ -30,16 +38,19 @@ class Empresa():
         else:
             return 'Serviço'
 
+    #Função forma o telefone, a formatação elimina espaços e caracteres especiais
     @staticmethod
     def formatarTelefone():
         telefone = re.sub(r'D','', fake.phone_number())
         return telefone
-
+    
+    #Função forma o CNPJ, a formatação elimina espaços e caracteres especiais
     @staticmethod
     def formatarCnpj():
         cnpj = re.sub(r'D','',fake.cnpj())
         return cnpj    
 
+    #Classe associada ao banco, responsavel por atribuir todos os dados da tabela
     @classmethod
     def cadastrarEmpresa(cls):
         fantasia = fake.company()
@@ -52,6 +63,7 @@ class Empresa():
         atividade = cls.gerarAtividade()
         return(fantasia, razao_social, cnpj, email, endereco, telefone, porte, atividade)
     
+     #Classe responsavel por pegar os dados que foram atribuidos e inserir no banco de dados
     @classmethod
     def inserirBanco(cls):
         conn = conexao_db()

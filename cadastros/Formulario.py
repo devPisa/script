@@ -1,16 +1,22 @@
 from faker import Faker;
 from conexao_db import conexao_db
+from lorem.text import TextLorem
 
 fake = Faker('pt_BR')
+lorem = TextLorem()
 
 class Formulario():
    
+   #Função para gerar um titulo lorem e definir se o formulario é base ou não
+   #para o script ser base ou não não vai influenciar em nada
+   #Classe associada ao banco, responsavel por atribuir todos os dados da tabela
     @staticmethod
     def cadastrarFormulario():
-        titulo = fake.random_int()
+        titulo = lorem.sentence()
         base = fake.random_int(0, 1)
         return (titulo, base)
 
+    #Classe responsavel por pegar os dados que foram atribuidos e inserir no banco de dados
     @classmethod
     def inserirBanco(cls):
         conn = conexao_db()
@@ -33,6 +39,7 @@ class Formulario():
             finally:
                 cursor.close()
                 conn.close()
+                
     @classmethod
     def id_formulario(cls):
         conn = conexao_db()

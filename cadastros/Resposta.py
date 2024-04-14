@@ -10,16 +10,22 @@ lorem = TextLorem()
 
 class Resposta():
 
+    #A aplicação permite respostas "Conforme" nesse caso sendo 1 e "Não conforme"
+    #nesse caso sendo 2, a resposta "N/A" não foi considerada durante a elaboração do
+    #scrpit
     @staticmethod
     def gerarResposta():
         return fake.random_int(1,2) == 1
 
+    #Condição para gerar observação no formulario, se = 0, a função retorna um paragrafo
+    #lorem, caso contrario retorna uma string vazia
     @staticmethod
     def gerarObservacao():
         if fake.random_int(0,1) == 0:
             return lorem.paragraph()
         return ''
-
+    
+    #Função instaciando um novo formulario, e chamando a função para inserir o formulario no banco
     @classmethod
     def id_formulario(cls):
         return Formulario().inserirBanco()
@@ -29,6 +35,7 @@ class Resposta():
         conn = conexao_db()
         cursor = conn.cursor()
         try:
+            #Fazendo um select para selecionar um usuario aleatório para atribuir a resposta a ele
             id_usuario = """
                         SELECT Usuario.id_usuario
                         FROM Usuario
@@ -40,6 +47,7 @@ class Resposta():
         except Exception as bug:
             print(f"Falha consultar id_usuario no banco de dados: {bug}")
         try:
+            #Selecionando todas perguntas existentes no banco
             allPerguntas = """
                         SELECT Pergunta.id_pergunta
                         FROM  Pergunta
@@ -53,19 +61,25 @@ class Resposta():
 
         gerarId = []
 
+        #Pegando todas perguntas selecionadas e atribuindo a um vetor que suporte somente
+        #as primeiras 15 perguntas
         numPerguntas = min(15, len(id_perguntas))
         
         id_formulario = cls.id_formulario()
-
+        
+        #Mapeando o vetor para retornar uma tumpla de resultado, e concatetando a tumpla
+        #o id_usuario, id_pergunta, id_formulario
         for i in range(numPerguntas):
             id_pergunta = id_perguntas[i][0]
             gerarId.append((id_usuario, id_pergunta, id_formulario))
         return gerarId
     
+    #Instaciando um novo formulario e chamando a função para inserir no banco
     @classmethod
     def gerarCertificado(cls):
          return Certificado().inserirBanco()
-        
+    
+    #Classe associada ao banco, responsavel por atribuir todos os dados da tabela
     @classmethod
     def cadastrarResposta(cls):
         observacao = cls.gerarObservacao()
@@ -74,6 +88,7 @@ class Resposta():
         resposta = cls.gerarResposta()
         return(observacao, id_usuario, id_pergunta, id_formulario, id_certificado, resposta)
 
+    #Classe responsavel por pegar os dados que foram atribuidos e inserir no banco de dados
     @classmethod
     def inserirBanco(cls):
         conn = conexao_db()
@@ -99,6 +114,8 @@ class Resposta():
             cursor.close()
             conn.close()
 
+    #Classe responsavel por verificar o ultimo id_resposta inserido no banco e retornar
+    # para associar a tabela de ceriticado
     @classmethod
     def id_resposta():
         conn = conexao_db()
