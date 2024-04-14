@@ -47,7 +47,7 @@ pip install randon
 
 ```python
 Python 3.12.0
-Pip 3.12.0
+Pip 24.0
 Faker 24.4.0
 MySQL.connector 8.3.0
 Lorem 0.0.1
