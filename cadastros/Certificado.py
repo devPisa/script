@@ -14,6 +14,8 @@ class Certificado():
         if conn:
             cursor = conn.cursor()
             try:
+                #Aqui estamos fazendo um select na tabela empresa e sortenado uma 
+                #empresa aleatoria
                 id_empresaQuery =   """
                                     SELECT Empresa.id_empresa
                                     FROM Empresa
@@ -36,6 +38,7 @@ class Certificado():
         if conn:
             cursor = conn.cursor()
             try:
+                #Consultando o banco de dados e fazendo a media dos dados da resposta
                 cursor.execute  ("""
                                 SELECT AVG(Resposta.resposta) AS mediaRespostas
                                 FROM Resposta   
@@ -44,7 +47,7 @@ class Certificado():
                                 """, (id_formulario,))
                 mediaResposta = cursor.fetchone()[0]
                 calculoResultado = (mediaResposta) * 100
-
+                #regra de negocio para calcular a media
                 if calculoResultado < 74:
                     resultadoMedia = 'Reprovado'
                 elif 75 <= calculoResultado <= 85:
@@ -62,12 +65,14 @@ class Certificado():
                 cursor.close()
                 conn.close()
 
+    #Função pegar pegar a data atual e somar 1 ano, para atribuir a validade do formulario
     @staticmethod       
     def gerarData(start_date= datetime.now()):
         date = fake.date_between_dates(date_start=start_date)
         data = (date.day, date.month, (date.year)+1)
         return data
 
+    #Classe associada ao banco, responsavel por atribuir todos os dados da tabela
     @classmethod
     def gerarCertificado(cls):
         resultado = cls.calcularResultado()
