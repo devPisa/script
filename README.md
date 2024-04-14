@@ -40,10 +40,10 @@ pip install datetime
 pip install secrets
 pip install mysql.connector
 pip install re
-pip install lorem.text
+pip install lorem
 pip install randon
 ```
-## Versôes utilizadas
+## Versões utilizadas
 
 ```python
 Python 3.12.0
