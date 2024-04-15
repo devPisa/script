@@ -13,6 +13,7 @@ class Formulario():
     @staticmethod
     def cadastrarFormulario():
         titulo = lorem.sentence()
+        print(titulo)
         base = fake.random_int(0, 1)
         return (titulo, base)
 
@@ -23,23 +24,38 @@ class Formulario():
         if conn:
             cursor = conn.cursor()
             try:
-                values = cls.cadastrarFormulario()
-                sql =   """
-                        INSERT INTO Certificado (titulo, base)
-                        VALUES (%s, %s)
-                        """
-                cursor.execute(sql, values)
-                conn.commit()
-                print(f'Formulario cadastrado')
-
+                continuar = True
+                while continuar:
+                    qtdMeta = int(input("Quantos formulários deseja inserir no banco?"))
+                    qtdAtual = 0
+                    while qtdAtual < qtdMeta:
+                        values = cls.cadastrarFormulario()
+                        sql =   """
+                                INSERT INTO formulario (titulo, base)
+                                VALUES (%s, %s)
+                                """
+                        cursor.execute(sql, values)
+                        qtdAtual +=1
+                        print(f'Formulario cadastrado')
+                        
+                        print(f"{qtdAtual} já cadastrados\n")
+                        conn.commit()
+                        print(values)
+                        
+                    decisao = input(f"Deseja continuar? (s/n)")
+                    if decisao.lower() != 's':
+                        continuar = False
+                print(f"Cadastro finalizado, {qntdAtual} cadastrados\n")       
             except Exception as bug:
                 print(f"Falha ao incerir cadastro no banco de dados: {bug}")
                 conn.rollback()
-            
+                
             finally:
                 cursor.close()
                 conn.close()
                 
+                
+                   
     @classmethod
     def id_formulario(cls):
         conn = conexao_db()
@@ -49,8 +65,8 @@ class Formulario():
                 cursor.execute("""
                                 SELECT Formulario.id_formulario
                                 FROM Formulario
-                                ORDER BY id_formulario
-                                DESC LIMIT 1
+                                ORDER BY rand()
+                                LIMIT 1
                                """)
                 id_formulario = cursor.fetchone()[0]
                 
@@ -60,5 +76,4 @@ class Formulario():
             finally:
                 cursor.close()
                 conn.close()
-
-   
+                
