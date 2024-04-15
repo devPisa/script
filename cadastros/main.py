@@ -1,49 +1,85 @@
-from Empresa import Empresa
-from Usuario import Usuario
-from Resposta import Resposta
-from Pergunta import Pergunta
-from Certificado import Certificado
-from Formulario import Formulario
-from FormularioPergunta import formularioPergunta
-from Documento import Documento
+from empresa import empresa
+from usuario import usuario
+from resposta import resposta
+from pergunta import pergunta
+from certificado import certificado
+from formulario import formulario
+from formularioPergunta import formularioPergunta
+from documento import documento
 
 def main():
-    decisao = input("""
-                    Projeto Integrador SAGA - Grupo 2
-                    Oque deseja fazer?
+    #inserirEmpresa()
+    #inserirUsuario()
+    inserirPerguntas()
+    inserirFormularios()
+    relacionarFormularioPergunta()
+    inserirRespostas()
+    inserirCertificados()
+    inserirDocumentos()
 
-                    1 - Cadastrar Empresa
-                    2 - Cadastrar Usuario
-                    3 - Cadastrar Resposta
-                    4 - Cadastrar Pergunta
-                    5 - Cadastrar Formulario
-                    6 - Cadastrar nnCertificado
-                    7 - Relacionar Pergunta ao Formulário
-                    8 - Inserir Link de Documento
-                    """
-                    )
-    
-    decisao = int(decisao)
+def inserirEmpresa():
+    qntdAtual = 0
+    for _ in range(100000):
+        empresa().inserirBanco()
+        qntdAtual += 1
+        if qntdAtual % 100 == 0:
+            print(f"{qntdAtual} empresas já cadastradas!")
 
-    
-    if decisao == 1:
-        Empresa().inserirBanco()
-    elif decisao == 2:
-        Usuario().inserirBanco()
-    elif decisao == 3:
-        Resposta().inserirBanco()
-    elif decisao == 4:
-        Pergunta().inserirBanco()
-    elif decisao == 5:
-        Formulario().inserirBanco()
-    elif decisao == 6:
-        Certificado().inserirBanco()
-    elif decisao == 7: 
+def inserirUsuario():
+    qntdAtual = 0
+    for _ in range(100000):
+        usuario().inserirBanco()
+        qntdAtual += 1
+        if qntdAtual % 100 == 0:
+            print(f"{qntdAtual} usuários já cadastrados!")
+
+def inserirRespostas():
+    qntdAtual = 0
+    for _ in range(100000):
+        resposta().inserirBanco()
+        qntdAtual += 1
+        if qntdAtual % 100 == 0:
+            print(f"{qntdAtual} respostas já cadastradas!")
+
+def inserirPerguntas():
+    qntdAtual = 0
+    for _ in range(100000):
+        pergunta().inserirBanco()
+        qntdAtual += 1
+        if qntdAtual % 100 == 0:
+            print(f"{qntdAtual} perguntas já cadastradas!")
+
+def inserirFormularios():
+    qntdAtual = 0
+    for _ in range(100000):
+        formulario().inserirBanco()
+        qntdAtual += 1
+        if qntdAtual % 100 == 0:
+            print(f"{qntdAtual} formulários já cadastrados!")
+
+def relacionarFormularioPergunta():
+    qntdAtual = 0
+    for _ in range(100000):
         formularioPergunta().inserirBanco()
-    elif decisao == 8:
-        Documento().respostaDocumento()
-    else:
-        print("Favor inserir opção valida, 1 a 3.")
+        qntdAtual += 1
+        if qntdAtual % 100 == 0:
+            print(f"{qntdAtual} relacionamentos entre formulários e perguntas já cadastrados!")
+
+def inserirCertificados():
+    qntdAtual = 0
+    for _ in range(100000):
+        certificado().inserirBanco()
+        qntdAtual += 1
+        if qntdAtual % 100 == 0:
+            print(f"{qntdAtual} certificados já cadastrados!")
+
+def inserirDocumentos():
+    qntdAtual = 0
+    for _ in range(100000):
+        documento().inserirBanco()
+        qntdAtual += 1
+        if qntdAtual % 100 == 0:
+            print(f"{qntdAtual} documentos já cadastrados!")
 
 if __name__ == "__main__":
     main()

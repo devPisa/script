@@ -15,10 +15,8 @@ def conexao_db():
         )
 
         if conn.is_connected():
-            print("Conexão realizada com sucesso")
             return conn
         else:
-            print("Conexão falhou")
             return None
 
     except mysql.connector.Error as bug:

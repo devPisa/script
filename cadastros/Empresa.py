@@ -4,7 +4,7 @@ from conexao_db import conexao_db
 
 fake = Faker('pt_BR')
 
-class Empresa():
+class empresa():
     #Função gera um e-mail a partir do nome e sobrenome do usuario
     #Ela concatena a primeira letra do primeiro nome com o ultimo nome
     #Ainda adiciona o dominio bpkgrupo2.com e tranforma tudo em lower(minusculo)
@@ -70,31 +70,16 @@ class Empresa():
         if conn:
             cursor = conn.cursor()
             try:
-                continuar = True
-                while continuar:
-                    qntdMeta = int(input("Quantas empresas deseja cadastrar?\n"))
-                    qntdAtual = 0
-                    while qntdAtual < qntdMeta:
-                        values = cls.cadastrarEmpresa()
-                        sql =   """
-                                INSERT INTO Empresa (fantasia, razao_social, cnpj, email, endereco, telefone, porte, atividade) 
-                                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                                """
-                        cursor.execute(sql, values)
-                        qntdAtual += 1
-                        
-                        print(f"{qntdAtual} já cadastrados\n")
-                        conn.commit()
-                        print(values)
-                    decisao = input(f"Deseja continuar? (s/n)")
-                    if decisao.lower() != 's':
-                        continuar = False
-                print(f"Cadastro finalizado, {qntdAtual} cadastrados\n")
-
+                values = cls.cadastrarEmpresa()
+                sql =   """
+                        INSERT INTO empresa (fantasia, razao_social, cnpj, email, endereco, telefone, porte, atividade) 
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        """
+                cursor.execute(sql, values)
+                conn.commit()
             except Exception as bug:
-                print(f"Falha ao incerir cadastro no banco de dados: {bug}");
-                conn.rollback();
-            
+                print(f"Falha ao inserir cadastro no banco de dados: {bug}")
+                conn.rollback()
             finally:
                 cursor.close()
                 conn.close()

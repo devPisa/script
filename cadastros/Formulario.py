@@ -5,7 +5,7 @@ from lorem.text import TextLorem
 fake = Faker('pt_BR')
 lorem = TextLorem()
 
-class Formulario():
+class formulario():
    
    #Função para gerar um titulo lorem e definir se o formulario é base ou não
    #para o script ser base ou não não vai influenciar em nada
@@ -13,7 +13,6 @@ class Formulario():
     @staticmethod
     def cadastrarFormulario():
         titulo = lorem.sentence()
-        print(titulo)
         base = fake.random_int(0, 1)
         return (titulo, base)
 
@@ -24,38 +23,22 @@ class Formulario():
         if conn:
             cursor = conn.cursor()
             try:
-                continuar = True
-                while continuar:
-                    qtdMeta = int(input("Quantos formulários deseja inserir no banco?"))
-                    qtdAtual = 0
-                    while qtdAtual < qtdMeta:
-                        values = cls.cadastrarFormulario()
-                        sql =   """
-                                INSERT INTO formulario (titulo, base)
-                                VALUES (%s, %s)
-                                """
-                        cursor.execute(sql, values)
-                        qtdAtual +=1
-                        print(f'Formulario cadastrado')
-                        
-                        print(f"{qtdAtual} já cadastrados\n")
-                        conn.commit()
-                        print(values)
-                        
-                    decisao = input(f"Deseja continuar? (s/n)")
-                    if decisao.lower() != 's':
-                        continuar = False
-                print(f"Cadastro finalizado, {qntdAtual} cadastrados\n")       
+                values = cls.cadastrarFormulario()
+                sql =   """
+                        INSERT INTO formulario (titulo, base)
+                        VALUES (%s, %s)
+                        """
+                cursor.execute(sql, values)
+                conn.commit()     
             except Exception as bug:
-                print(f"Falha ao incerir cadastro no banco de dados: {bug}")
-                conn.rollback()
-                
+                print(f"Falha ao inserir cadastro no banco de dados: {bug}")
+                conn.rollback()  
             finally:
                 cursor.close()
                 conn.close()
-                
-                
-                   
+
+    #Classe responsavel por recuperar o ultimo id_formulario inserido e usar para
+    #associar a tabela resposta                  
     @classmethod
     def id_formulario(cls):
         conn = conexao_db()
@@ -69,7 +52,6 @@ class Formulario():
                                 LIMIT 1
                                """)
                 id_formulario = cursor.fetchone()[0]
-                
                 return id_formulario
             except Exception as bug:
                 print(f"Falha consultar id_formulario no banco de dados: {bug}")

@@ -1,15 +1,15 @@
 from faker import Faker
 from datetime import datetime
-from Formulario import Formulario
+from formulario import formulario
 from conexao_db import conexao_db
 
 fake = Faker('pt_BR')
 
-class Certificado():
+class certificado():
 
     @classmethod 
     def pegarId(cls):
-        id_formulario = Formulario.id_formulario()
+        id_formulario = formulario.id_formulario()
         conn = conexao_db()
         if conn:
             cursor = conn.cursor()
@@ -17,8 +17,8 @@ class Certificado():
                 #Aqui estamos fazendo um select na tabela empresa e sortenado uma 
                 #empresa aleatoria
                 id_empresaQuery =   """
-                                    SELECT Empresa.id_empresa
-                                    FROM Empresa
+                                    SELECT empresa.id_empresa
+                                    FROM empresa
                                     ORDER BY RAND()
                                     LIMIT 1
                                     """
@@ -33,17 +33,17 @@ class Certificado():
 
     @classmethod
     def calcularResultado(cls):
-        id_formulario = Formulario.id_formulario()
+        id_formulario = formulario.id_formulario()
         conn = conexao_db()
         if conn:
             cursor = conn.cursor()
             try:
                 #Consultando o banco de dados e fazendo a media dos dados da resposta
                 cursor.execute  ("""
-                                SELECT AVG(Resposta.resposta) AS mediaRespostas
-                                FROM Resposta   
-                                INNER JOIN Formulario ON Resposta.id_formulario = Formulario.id_formulario
-                                Where Resposta.id_formulario = Formulario.%s
+                                SELECT AVG(resposta.resposta) AS mediaRespostas
+                                FROM resposta   
+                                INNER JOIN Formulario ON resposta.id_formulario = formulario.id_formulario
+                                Where resposta.id_formulario = formulario.%s
                                 """, (id_formulario,))
                 mediaResposta = cursor.fetchone()[0]
                 calculoResultado = (mediaResposta) * 100
@@ -78,10 +78,8 @@ class Certificado():
         resultado = cls.calcularResultado()
         id_formulario, id_empresa = cls.pegarId()
         vencimento = cls.gerarData()
-        print(f"Retorno da função{resultado, id_formulario, id_empresa, vencimento}")
         return (resultado, id_formulario, id_empresa, vencimento)
         
-
     @classmethod
     def inserirBanco(cls):
         conn = conexao_db()
@@ -90,11 +88,10 @@ class Certificado():
             try:
                 values = cls.gerarCertificado()
                 sql =   """
-                        INSERT INTO Certificado (resultado, id_formulario, id_empresa, vencimento)
+                        INSERT INTO certificado (resultado, id_formulario, id_empresa, vencimento)
                         VALUES (%s, %s, %s, %s)
                         """
                 cursor.execute(sql, values)
-                print(f'Certificado cadastrado, resultado: {values[0]}')
                 conn.commit()
                 cursor.execute("""
                                 SELECT LAST_INSERT_ID()
@@ -104,7 +101,7 @@ class Certificado():
                 return id_certificado
 
             except Exception as bug:
-                print(f"Falha ao incerir cadastro no banco de dados: {bug}")
+                print(f"Falha ao inserir cadastro no banco de dados: {bug}")
                 conn.rollback()
             
             finally:
