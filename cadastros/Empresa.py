@@ -23,8 +23,8 @@ class Empresa():
         if ',' in endereco:
             endereco = endereco.split(',')[0].strip() 
         elif '\n' in endereco:
-            endereco = endereco.split('\n')[0].strip;
-        return endereco
+            endereco = endereco.split('\n')[0].strip()
+            return endereco
 
     #Função gerar atividade, faz um random de 1 á 3 e atribuir a atividade
     #aleatoriamente de acordo com o numero
@@ -38,16 +38,16 @@ class Empresa():
         else:
             return 'Serviço'
 
-    #Função forma o telefone, a formatação elimina espaços e caracteres especiais
+    #Função forma o telefone, a formatação elimina espaços e caractenres especiais
     @staticmethod
     def formatarTelefone():
-        telefone = re.sub(r'D','', fake.phone_number())
+        telefone = re.sub(r'\D','', fake.phone_number())
         return telefone
     
     #Função forma o CNPJ, a formatação elimina espaços e caracteres especiais
     @staticmethod
     def formatarCnpj():
-        cnpj = re.sub(r'D','',fake.cnpj())
+        cnpj = re.sub(r'\D','',fake.cnpj())
         return cnpj    
 
     #Classe associada ao banco, responsavel por atribuir todos os dados da tabela
@@ -67,17 +67,14 @@ class Empresa():
     @classmethod
     def inserirBanco(cls):
         conn = conexao_db()
-        
         if conn:
             cursor = conn.cursor()
-
             try:
-
                 continuar = True
                 while continuar:
                     qntdMeta = int(input("Quantas empresas deseja cadastrar?\n"))
                     qntdAtual = 0
-                    while qntdAtual <= qntdMeta:
+                    while qntdAtual < qntdMeta:
                         values = cls.cadastrarEmpresa()
                         sql =   """
                                 INSERT INTO Empresa (fantasia, razao_social, cnpj, email, endereco, telefone, porte, atividade) 
@@ -85,12 +82,14 @@ class Empresa():
                                 """
                         cursor.execute(sql, values)
                         qntdAtual += 1
+                        
                         print(f"{qntdAtual} já cadastrados\n")
+                        conn.commit()
+                        print(values)
                     decisao = input(f"Deseja continuar? (s/n)")
                     if decisao.lower() != 's':
                         continuar = False
                 print(f"Cadastro finalizado, {qntdAtual} cadastrados\n")
-                conn.commit()
 
             except Exception as bug:
                 print(f"Falha ao incerir cadastro no banco de dados: {bug}");

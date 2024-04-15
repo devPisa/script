@@ -48,19 +48,18 @@ class Pergunta:
     #Classe responsavel por recuperar o ultimo id_pergunta inserido e usar para
     #associar a tabela resposta
     @classmethod
-    def id_pergunta():
-        conn = conexao_db
+    def id_pergunta(cls):
+        conn = conexao_db()
         cursor = conn.cursor()
         if conn:
             try:
                 cursor.execute("""
-                                SELECT Pergunta.id_formulario
+                                SELECT Pergunta.id_pergunta
                                 FROM Pergunta
-                                ORDER BY id_pergunta
-                                DESC LIMIT 1
+                                ORDER BY rand()
+                                LIMIT 1
                                """)
                 id_pergunta = cursor.fetchone()[0]
-                
                 return id_pergunta
             except Exception as bug:
                 print(f"Falha consultar id_pergunta no banco de dados: {bug}")

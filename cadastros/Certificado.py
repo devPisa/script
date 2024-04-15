@@ -67,10 +67,10 @@ class Certificado():
 
     #Função pegar pegar a data atual e somar 1 ano, para atribuir a validade do formulario
     @staticmethod       
-    def gerarData(start_date= datetime.now()):
+    def gerarData(start_date=datetime.now()):
         date = fake.date_between_dates(date_start=start_date)
-        data = (date.day, date.month, (date.year)+1)
-        return data
+        data = datetime(date.year + 1, date.month, date.day)
+        return data.strftime('%Y-%m-%d')
 
     #Classe associada ao banco, responsavel por atribuir todos os dados da tabela
     @classmethod
@@ -78,15 +78,15 @@ class Certificado():
         resultado = cls.calcularResultado()
         id_formulario, id_empresa = cls.pegarId()
         vencimento = cls.gerarData()
+        print(f"Retorno da função{resultado, id_formulario, id_empresa, vencimento}")
         return (resultado, id_formulario, id_empresa, vencimento)
+        
 
     @classmethod
     def inserirBanco(cls):
         conn = conexao_db()
-
         if conn:
             cursor= conn.cursor()
-            
             try:
                 values = cls.gerarCertificado()
                 sql =   """

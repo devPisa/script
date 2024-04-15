@@ -12,12 +12,12 @@ class Usuario():
     @staticmethod
     def gerarNome(): 
         nome_completo = fake.name()
+        print(nome_completo)
         if '.' in nome_completo:
-            nome_completo = nome_completo.split(' ')[1].strip()
+            partes_nome = nome_completo.split(' ')
+            nome_completo = ' '.join(partes_nome[1:])
         return nome_completo
-    #Função gera um e-mail a partir do nome e sobrenome do usuario
-    #Ela concatena a primeira letra do primeiro nome com o ultimo nome
-    #Ainda adiciona o dominio bpkgrupo2.com e tranforma tudo em lower(minusculo)
+
     @staticmethod
     def gerarEmail(nome:str, sobrenome:str):
         if len(nome) > 0 and len(sobrenome)> 0:
@@ -26,14 +26,14 @@ class Usuario():
     #Função forma o telefone, a formatação elimina espaços e caracteres especiais
     @staticmethod
     def formatarTelefone():
-        telefone = re.sub(r'D','', fake.phone_number())
+        telefone = re.sub(r'\D','', fake.phone_number())
         return telefone
 
     #Função forma o CPF, a formatação elimina espaços e caracteres especiais
     @staticmethod
     def formatarCpf():
-        cpf = re.sub(r'D','', fake.cpf())
-        return cpf;
+        cpf = re.sub(r'\D','', fake.cpf())
+        return cpf
 
     #Classe associada ao banco, responsavel por atribuir todos os dados da tabela
     @classmethod      
@@ -44,7 +44,9 @@ class Usuario():
         telefone = cls.formatarTelefone()
         email = cls.gerarEmail(nome, sobrenome)
         cidade = fake.city()
+        print(senha, nome, sobrenome, cpf, telefone, email, cidade)
         return(senha, nome, sobrenome, cpf, telefone, email, cidade)
+    
     
     #Classe responsavel por pegar os dados que foram atribuidos e inserir no banco de dados
     @classmethod
@@ -56,21 +58,22 @@ class Usuario():
                 continuar = True
                 while continuar:
                     qntd_meta = int(input("Quantos usuarios deseja cadastrar?\n"))
-                    qntd_atual = 0;
+                    qntd_atual = 0
                     while qntd_atual <= qntd_meta:
                         values = cls.cadastrarUsuario()
                         sql =   """
                                 INSERT INTO Usuario (senha, nome, sobrenome, cpf, telefone, email, cidade) 
-                                VALUES (%s, %s, %s, %s, %s, %s, %s,)
+                                VALUES (%s, %s, %s, %s, %s, %s, %s)
                                 """
                         cursor.execute(sql, values)
                         qntd_atual += 1
                         print(f"{qntd_atual} já cadastrados\n")
+                        conn.commit()
+                        
                     decisao = input(f"Deseja continuar? (s/n)")
                     if decisao.lower() != 's':
                         continuar = False
                 print(f"Cadastro finalizado, {qntd_atual} cadastrados\n")
-                conn.commit()
             except Exception as bug:
                 print(f"Falha ao incerir cadastro no banco de dados: {bug}")
                 conn.rollback()
